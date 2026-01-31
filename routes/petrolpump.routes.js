@@ -6,7 +6,7 @@ const auth = require("../middleware/auth");
 /**
  * Create Petrol Pump (Owner only)
  */
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     if (req.user.role !== "owner") {
       return res.status(403).json({ message: "Access denied" });
@@ -30,7 +30,7 @@ router.post("/", auth, async (req, res) => {
 /**
  * Get My Petrol Pumps (both /pumps and /pumps/my work)
  */
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, async (req, res, next) => {
   try {
     const pumps = await PetrolPump.find({
       owners: req.user.id,
@@ -44,7 +44,7 @@ router.get("/", auth, async (req, res) => {
 /**
  * Get My Petrol Pumps (alternative route)
  */
-router.get("/my", auth, async (req, res) => {
+router.get("/my", auth, async (req, res, next) => {
   try {
     const pumps = await PetrolPump.find({
       owners: req.user.id,
