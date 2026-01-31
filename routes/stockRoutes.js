@@ -6,7 +6,7 @@ const DailyReading = require("../models/DailyReading");
 const authMiddleware = require("../middleware/auth");
 
 // ➕ Create/Update Daily Stock Entry
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -99,7 +99,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // 📄 Get stock for a pump on a specific date
-router.get("/pump/:pumpId/date/:date", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId/date/:date", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId, date } = req.params;
 
@@ -116,7 +116,7 @@ router.get("/pump/:pumpId/date/:date", authMiddleware, async (req, res) => {
 });
 
 // 📊 Get stock summary for a fuel type (date range)
-router.get("/pump/:pumpId/fuel/:fuelType", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId/fuel/:fuelType", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId, fuelType } = req.params;
         const { startDate, endDate } = req.query;
@@ -152,7 +152,7 @@ router.get("/pump/:pumpId/fuel/:fuelType", authMiddleware, async (req, res) => {
 });
 
 // 🔄 Add purchase to existing stock
-router.put("/:stockId/purchase", authMiddleware, async (req, res) => {
+router.put("/:stockId/purchase", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -197,7 +197,7 @@ router.put("/:stockId/purchase", authMiddleware, async (req, res) => {
 });
 
 // 🔒 Lock stock entry (prevent further edits)
-router.put("/:stockId/lock", authMiddleware, async (req, res) => {
+router.put("/:stockId/lock", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -223,7 +223,7 @@ router.put("/:stockId/lock", authMiddleware, async (req, res) => {
 });
 
 // 🔄 Sync stock with daily readings (recalculate sold stock)
-router.put("/:stockId/sync", authMiddleware, async (req, res) => {
+router.put("/:stockId/sync", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
