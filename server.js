@@ -16,7 +16,11 @@ const app = express();
 
 // CORS configuration for frontend
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://petrol-pump-frontend-alpha.vercel.app'
+  ],
   credentials: true
 }));
 
