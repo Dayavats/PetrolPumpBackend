@@ -268,7 +268,7 @@ router.put("/:stockId/sync", authMiddleware, async (req, res) => {
 });
 
 // 🚨 Get low stock alerts for a pump
-router.get("/alerts/:pumpId", authMiddleware, async (req, res) => {
+router.get("/alerts/:pumpId", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId } = req.params;
         const today = new Date().setHours(0, 0, 0, 0);
@@ -281,10 +281,10 @@ router.get("/alerts/:pumpId", authMiddleware, async (req, res) => {
         });
 
         const alerts = [];
-        const REORDER_THRESHOLD = 0.25; // 25% of capacity
+        const DEFAULT_TANK_CAPACITY = 10000;
 
-        stocks.forEach(stock => {
-            const tankCapacity = stock.tankCapacity || 10000;
+        for (const stock of stocks) {
+            const tankCapacity = DEFAULT_TANK_CAPACITY;
             const percentageRemaining = (stock.closingStock / tankCapacity) * 100;
             
             if (percentageRemaining <= 25) {
@@ -300,7 +300,7 @@ router.get("/alerts/:pumpId", authMiddleware, async (req, res) => {
                     _id: stock._id
                 });
             }
-        });
+        }
 
         res.json({ alerts });
     } catch (error) {
