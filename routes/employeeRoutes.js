@@ -5,7 +5,7 @@ const PetrolPump = require("../models/PetrolPump");
 const authMiddleware = require("../middleware/auth");
 
 // ➕ Create Employee (OWNER only)
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -41,7 +41,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // 📄 Get employees of a pump
-router.get("/pump/:pumpId", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId", authMiddleware, async (req, res, next) => {
     try {
         const employees = await Employee.find({
             petrolPump: req.params.pumpId,
@@ -55,7 +55,7 @@ router.get("/pump/:pumpId", authMiddleware, async (req, res) => {
 });
 
 // 🔄 Update employee
-router.put("/:employeeId", authMiddleware, async (req, res) => {
+router.put("/:employeeId", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -83,7 +83,7 @@ router.put("/:employeeId", authMiddleware, async (req, res) => {
 });
 
 // 🗑 Deactivate employee
-router.delete("/:employeeId", authMiddleware, async (req, res) => {
+router.delete("/:employeeId", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -106,7 +106,7 @@ router.delete("/:employeeId", authMiddleware, async (req, res) => {
 });
 
 // 📄 Get single employee
-router.get("/:employeeId", authMiddleware, async (req, res) => {
+router.get("/:employeeId", authMiddleware, async (req, res, next) => {
     try {
         const employee = await Employee.findOne({
             _id: req.params.employeeId,

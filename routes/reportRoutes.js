@@ -9,7 +9,7 @@ const emailService = require("../services/emailService");
 const authMiddleware = require("../middleware/auth");
 
 // 📄 Generate & Download Daily Report PDF
-router.get("/daily/:pumpId/:date", authMiddleware, async (req, res) => {
+router.get("/daily/:pumpId/:date", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId, date } = req.params;
 
@@ -93,7 +93,7 @@ router.get("/daily/:pumpId/:date", authMiddleware, async (req, res) => {
 });
 
 // 📧 Generate & Email Daily Report
-router.post("/daily/:pumpId/:date/email", authMiddleware, async (req, res) => {
+router.post("/daily/:pumpId/:date/email", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -194,7 +194,7 @@ router.post("/daily/:pumpId/:date/email", authMiddleware, async (req, res) => {
 });
 
 // 📄 Generate Monthly Report PDF
-router.get("/monthly/:pumpId/:year/:month", authMiddleware, async (req, res) => {
+router.get("/monthly/:pumpId/:year/:month", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId, year, month } = req.params;
 
@@ -277,7 +277,7 @@ router.get("/monthly/:pumpId/:year/:month", authMiddleware, async (req, res) => 
 });
 
 // 📧 Test email configuration
-router.post("/test-email", authMiddleware, async (req, res) => {
+router.post("/test-email", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });

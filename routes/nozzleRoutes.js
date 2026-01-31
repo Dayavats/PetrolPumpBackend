@@ -6,7 +6,7 @@ const Employee = require("../models/Employee");
 const authMiddleware = require("../middleware/auth");
 
 // ➕ Create Nozzle/Machine (OWNER only)
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -46,7 +46,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // 📄 Get all nozzles for a pump
-router.get("/pump/:pumpId", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId", authMiddleware, async (req, res, next) => {
     try {
         const nozzles = await Nozzle.find({
             petrolPump: req.params.pumpId,
@@ -61,7 +61,7 @@ router.get("/pump/:pumpId", authMiddleware, async (req, res) => {
 });
 
 // 🔄 Assign employee to nozzle
-router.put("/:nozzleId/assign", authMiddleware, async (req, res) => {
+router.put("/:nozzleId/assign", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -99,7 +99,7 @@ router.put("/:nozzleId/assign", authMiddleware, async (req, res) => {
 });
 
 // 🔄 Update nozzle details
-router.put("/:nozzleId", authMiddleware, async (req, res) => {
+router.put("/:nozzleId", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -127,7 +127,7 @@ router.put("/:nozzleId", authMiddleware, async (req, res) => {
 });
 
 // 🗑 Deactivate nozzle
-router.delete("/:nozzleId", authMiddleware, async (req, res) => {
+router.delete("/:nozzleId", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });

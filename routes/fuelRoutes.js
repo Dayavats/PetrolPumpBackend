@@ -5,7 +5,7 @@ const PetrolPump = require("../models/PetrolPump");
 const authMiddleware = require("../middleware/auth");
 
 // ➕ Create Fuel Type (OWNER only)
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -51,7 +51,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // 📄 Get all fuel types for a pump
-router.get("/pump/:pumpId", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId", authMiddleware, async (req, res, next) => {
     try {
         const fuels = await Fuel.find({
             petrolPump: req.params.pumpId,
@@ -66,7 +66,7 @@ router.get("/pump/:pumpId", authMiddleware, async (req, res) => {
 });
 
 // 🔄 Update fuel price
-router.put("/:fuelId/price", authMiddleware, async (req, res) => {
+router.put("/:fuelId/price", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -101,7 +101,7 @@ router.put("/:fuelId/price", authMiddleware, async (req, res) => {
 });
 
 // 🗑 Deactivate fuel type
-router.delete("/:fuelId", authMiddleware, async (req, res) => {
+router.delete("/:fuelId", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });

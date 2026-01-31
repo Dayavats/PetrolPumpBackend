@@ -8,7 +8,7 @@ const PetrolPump = require("../models/PetrolPump");
 const authMiddleware = require("../middleware/auth");
 
 // ➕ Create/Update Daily Reading
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res, next) => {
     try {
         const {
             date,
@@ -144,7 +144,7 @@ async function updateStockFromReadings(petrolPumpId, date, fuelType, userId) {
 }
 
 // 📄 Get readings for a pump on a specific date
-router.get("/pump/:pumpId/date/:date", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId/date/:date", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId, date } = req.params;
 
@@ -170,7 +170,7 @@ router.get("/pump/:pumpId/date/:date", authMiddleware, async (req, res) => {
 });
 
 // 📊 Get daily summary for a pump
-router.get("/pump/:pumpId/summary/:date", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId/summary/:date", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId, date } = req.params;
 
@@ -214,7 +214,7 @@ router.get("/pump/:pumpId/summary/:date", authMiddleware, async (req, res) => {
 });
 
 // 🔒 Lock daily reading (prevent further edits)
-router.put("/:readingId/lock", authMiddleware, async (req, res) => {
+router.put("/:readingId/lock", authMiddleware, async (req, res, next) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -240,7 +240,7 @@ router.put("/:readingId/lock", authMiddleware, async (req, res) => {
 });
 
 // 📊 Get date range report
-router.get("/pump/:pumpId/report", authMiddleware, async (req, res) => {
+router.get("/pump/:pumpId/report", authMiddleware, async (req, res, next) => {
     try {
         const { pumpId } = req.params;
         const { startDate, endDate } = req.query;
