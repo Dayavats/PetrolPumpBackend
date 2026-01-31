@@ -1,0 +1,352 @@
+### Petrol Pump Management System - API Testing Guide
+### Use REST Client extension in VS Code or copy to Postman
+
+@baseUrl = http://localhost:5000/api
+@token = YOUR_TOKEN_HERE
+
+### ============================================
+### 1️⃣ AUTHENTICATION
+### ============================================
+
+### Register Owner
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "role": "owner"
+}
+
+### Login Owner
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### ============================================
+### 2️⃣ PETROL PUMP MANAGEMENT
+### ============================================
+
+### Create Petrol Pump
+POST {{baseUrl}}/pumps
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "ABC Petrol Pump",
+  "location": "Highway 101, Mumbai",
+  "contactNumber": "9876543210",
+  "gstNumber": "27AABCU9603R1ZM"
+}
+
+### Get My Pumps
+GET {{baseUrl}}/pumps
+Authorization: Bearer {{token}}
+
+### Get Single Pump (replace :pumpId)
+GET {{baseUrl}}/pumps/:pumpId
+Authorization: Bearer {{token}}
+
+### ============================================
+### 3️⃣ FUEL MANAGEMENT
+### ============================================
+
+### Add Petrol (replace petrolPumpId)
+POST {{baseUrl}}/fuels
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Petrol",
+  "petrolPumpId": "YOUR_PUMP_ID",
+  "currentPrice": 105.50
+}
+
+### Add Diesel
+POST {{baseUrl}}/fuels
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Diesel",
+  "petrolPumpId": "YOUR_PUMP_ID",
+  "currentPrice": 95.75
+}
+
+### Get Fuels for Pump
+GET {{baseUrl}}/fuels/pump/:pumpId
+Authorization: Bearer {{token}}
+
+### Update Fuel Price (replace :fuelId)
+PUT {{baseUrl}}/fuels/:fuelId/price
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "newPrice": 106.00
+}
+
+### ============================================
+### 4️⃣ NOZZLE/MACHINE MANAGEMENT
+### ============================================
+
+### Create Nozzle 1 - Petrol
+POST {{baseUrl}}/nozzles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nozzleNumber": "N1",
+  "machineNumber": "M1",
+  "fuelType": "Petrol",
+  "petrolPumpId": "YOUR_PUMP_ID"
+}
+
+### Create Nozzle 2 - Petrol
+POST {{baseUrl}}/nozzles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nozzleNumber": "N2",
+  "machineNumber": "M1",
+  "fuelType": "Petrol",
+  "petrolPumpId": "YOUR_PUMP_ID"
+}
+
+### Create Nozzle 3 - Diesel
+POST {{baseUrl}}/nozzles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nozzleNumber": "N3",
+  "machineNumber": "M2",
+  "fuelType": "Diesel",
+  "petrolPumpId": "YOUR_PUMP_ID"
+}
+
+### Get Nozzles for Pump
+GET {{baseUrl}}/nozzles/pump/:pumpId
+Authorization: Bearer {{token}}
+
+### Assign Employee to Nozzle (replace :nozzleId and employeeId)
+PUT {{baseUrl}}/nozzles/:nozzleId/assign
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "employeeId": "YOUR_EMPLOYEE_ID"
+}
+
+### ============================================
+### 5️⃣ EMPLOYEE MANAGEMENT
+### ============================================
+
+### Create Employee
+POST {{baseUrl}}/employees
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Ravi Kumar",
+  "phone": "9988776655",
+  "role": "operator",
+  "salary": 15000,
+  "petrolPumpId": "YOUR_PUMP_ID"
+}
+
+### Create Manager
+POST {{baseUrl}}/employees
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Suresh Sharma",
+  "phone": "9988776656",
+  "role": "manager",
+  "salary": 25000,
+  "petrolPumpId": "YOUR_PUMP_ID"
+}
+
+### Get Employees for Pump
+GET {{baseUrl}}/employees/pump/:pumpId
+Authorization: Bearer {{token}}
+
+### Get Single Employee
+GET {{baseUrl}}/employees/:employeeId
+Authorization: Bearer {{token}}
+
+### Update Employee
+PUT {{baseUrl}}/employees/:employeeId
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Ravi Kumar Updated",
+  "phone": "9988776655",
+  "role": "manager",
+  "salary": 18000
+}
+
+### Deactivate Employee
+DELETE {{baseUrl}}/employees/:employeeId
+Authorization: Bearer {{token}}
+
+### ============================================
+### 6️⃣ DAILY READINGS
+### ============================================
+
+### Enter Opening & Closing Reading for Nozzle 1
+POST {{baseUrl}}/readings
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "date": "2026-01-31",
+  "petrolPumpId": "YOUR_PUMP_ID",
+  "nozzleId": "YOUR_NOZZLE_ID",
+  "openingReading": 1000,
+  "closingReading": 1500,
+  "cashAmount": 25000,
+  "upiAmount": 20000,
+  "cardAmount": 8000
+}
+
+### Enter Reading for Nozzle 2
+POST {{baseUrl}}/readings
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "date": "2026-01-31",
+  "petrolPumpId": "YOUR_PUMP_ID",
+  "nozzleId": "YOUR_NOZZLE_2_ID",
+  "openingReading": 2000,
+  "closingReading": 2300,
+  "cashAmount": 15000,
+  "upiAmount": 15000,
+  "cardAmount": 2000
+}
+
+### Get Readings for Date
+GET {{baseUrl}}/readings/pump/:pumpId/date/2026-01-31
+Authorization: Bearer {{token}}
+
+### Get Daily Summary
+GET {{baseUrl}}/readings/pump/:pumpId/summary/2026-01-31
+Authorization: Bearer {{token}}
+
+### Get Date Range Report
+GET {{baseUrl}}/readings/pump/:pumpId/report?startDate=2026-01-01&endDate=2026-01-31
+Authorization: Bearer {{token}}
+
+### Lock Reading (prevent edits)
+PUT {{baseUrl}}/readings/:readingId/lock
+Authorization: Bearer {{token}}
+
+### ============================================
+### 7️⃣ STOCK MANAGEMENT
+### ============================================
+
+### Create Daily Stock Entry - Petrol
+POST {{baseUrl}}/stock
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "date": "2026-01-31",
+  "petrolPumpId": "YOUR_PUMP_ID",
+  "fuelType": "Petrol",
+  "openingStock": 5000,
+  "purchasedStock": 2000,
+  "purchaseDetails": [
+    {
+      "quantity": 2000,
+      "pricePerLiter": 98.50,
+      "totalCost": 197000,
+      "supplier": "Indian Oil",
+      "invoiceNumber": "INV-2024-001",
+      "purchaseDate": "2026-01-31"
+    }
+  ]
+}
+
+### Create Daily Stock Entry - Diesel
+POST {{baseUrl}}/stock
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "date": "2026-01-31",
+  "petrolPumpId": "YOUR_PUMP_ID",
+  "fuelType": "Diesel",
+  "openingStock": 4000,
+  "purchasedStock": 1500,
+  "purchaseDetails": [
+    {
+      "quantity": 1500,
+      "pricePerLiter": 88.50,
+      "totalCost": 132750,
+      "supplier": "Bharat Petroleum",
+      "invoiceNumber": "INV-2024-002",
+      "purchaseDate": "2026-01-31"
+    }
+  ]
+}
+
+### Get Stock for Date
+GET {{baseUrl}}/stock/pump/:pumpId/date/2026-01-31
+Authorization: Bearer {{token}}
+
+### Get Stock Summary for Fuel Type
+GET {{baseUrl}}/stock/pump/:pumpId/fuel/Petrol?startDate=2026-01-01&endDate=2026-01-31
+Authorization: Bearer {{token}}
+
+### Add Purchase to Existing Stock
+PUT {{baseUrl}}/stock/:stockId/purchase
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "quantity": 500,
+  "pricePerLiter": 98.75,
+  "supplier": "Indian Oil",
+  "invoiceNumber": "INV-2024-003"
+}
+
+### Sync Stock with Daily Readings
+PUT {{baseUrl}}/stock/:stockId/sync
+Authorization: Bearer {{token}}
+
+### Lock Stock Entry
+PUT {{baseUrl}}/stock/:stockId/lock
+Authorization: Bearer {{token}}
+
+### ============================================
+### 8️⃣ UPDATE OPERATIONS
+### ============================================
+
+### Update Nozzle
+PUT {{baseUrl}}/nozzles/:nozzleId
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nozzleNumber": "N1-Updated",
+  "machineNumber": "M1",
+  "fuelType": "Petrol"
+}
+
+### Deactivate Nozzle
+DELETE {{baseUrl}}/nozzles/:nozzleId
+Authorization: Bearer {{token}}
+
+### Deactivate Fuel Type
+DELETE {{baseUrl}}/fuels/:fuelId
+Authorization: Bearer {{token}}
