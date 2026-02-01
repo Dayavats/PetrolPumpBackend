@@ -75,11 +75,10 @@ const stockSchema = new mongoose.Schema(
 );
 
 // Calculate totals before saving
-stockSchema.pre("save", function (next) {
+stockSchema.pre("save", function () {
     this.totalAvailable = this.openingStock + this.purchasedStock;
     this.closingStock = this.totalAvailable - this.soldStock;
     this.variance = this.closingStock; // Can be compared with physical measurement
-    next();
 });
 
 // Ensure unique stock entry per fuel type per pump per date
