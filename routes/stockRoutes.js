@@ -94,7 +94,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
                 .status(400)
                 .json({ message: "Stock entry already exists for this date" });
         }
-        res.status(500).json({ error: error.message });
+        next(error);
     }
 });
 
