@@ -89,6 +89,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
             stock,
         });
     } catch (error) {
+        console.error('Stock POST error:', error); // <-- log error for debugging
         if (error.code === 11000) {
             return res
                 .status(400)
