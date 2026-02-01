@@ -6,7 +6,7 @@ const DailyReading = require("../models/DailyReading");
 const authMiddleware = require("../middleware/auth");
 
 // ➕ Create/Update Daily Stock Entry
-router.post("/", authMiddleware, async (req, res, next) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
         if (req.user.role !== "owner") {
             return res.status(403).json({ message: "Access denied" });
@@ -95,7 +95,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
                 .status(400)
                 .json({ message: "Stock entry already exists for this date" });
         }
-        next(error);
+        res.status(500).json({ error: error.message });
     }
 });
 
